@@ -28,3 +28,10 @@ module.exports.responseSuc = (res, data, code) => {
 
     return res.json(send_data)
 }
+
+module.exports.TE = TE = (err_message, log) => {
+    if (log === true) {
+        console.error(err_message)
+    }
+    throw new Error(err_message)
+}
