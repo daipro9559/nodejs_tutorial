@@ -1,7 +1,11 @@
 const express = require('express');
 const userDb = require('./connect/db');
+const logger = require('morgan');
+const cors = require('cors');
 const app = express();
+const passport = require('passport');
 const router = express.Router();
+app.use(logger('dev'));
 app.use(express.urlencoded());
 app.use('/', router);
 var bodyParser = require('body-parser')
@@ -17,9 +21,12 @@ app.use(bodyParser.urlencoded({
 }))
 
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(methodOverride())
 app.use(errorHandler)
 app.use(test)
+    //Passport
+app.use(passport.initialize())
 
 
 function logError(err, req, res, next) {
@@ -43,21 +50,21 @@ function errorHandler(err, req, res, next) {
 //     next();
 // })
 
-app.get('/user/users', async(req, res) => {
-    var users = await userDb.findAllUser()
-    res.json(users);
-})
-app.post('/user/create', async(req, res) => {
-    console.log(req.body.name);
-    try {
-        var result = await userDb.createUser(req.body.name);
-        res.json(result);
-    } catch (err) {
-        res.json(err);
-    }
-})
-app.get('/', (res, req) => {
-
+// app.get('/user/users', async(req, res) => {
+//     var users = await userDb.findAllUser()
+//     res.json(users);
+// })
+// app.post('/user/create', async(req, res) => {
+//     console.log(req.body.name);
+//     try {
+//         var result = await userDb.createUser(req.body.name);
+//         res.json(result);
+//     } catch (err) {
+//         res.json(err);
+//     }
+// })
+app.get('/', (req, res) => {
+    res.send("welcom to kaopiz!")
 })
 app.listen(3000, () => {
     console.log("server listenning on port 3000")
