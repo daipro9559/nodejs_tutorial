@@ -1,10 +1,11 @@
+'use strict'
 const bcrypt = require('bcrypt');
 const bcrypt_promise = require('bcrypt-promise')
 const jwt = require('jsonwebtoken');
-const CONFIG = require('../conf/config')
+const CONFIG = require('../config/config')
 
 module.exports = (sequelize) => {
-    var userModel = sequelize.define('user', {
+    var userModel = sequelize.define('User', {
         id: {
             type: Sequelize.INTEGER,
             primaryKey: true,
@@ -44,6 +45,10 @@ module.exports = (sequelize) => {
         let exp_time = parseInt(CONFIG.jwt_expiration)
         return "Bearer " + jwt.sign({ user_id: this.id }, CONFIG.jwt_encryption, { expiresIn: expiration_time });
     }
-    
+
+    userModel.prototype.toWeb = function (pw) {
+        let json = this.toJSON();
+        return json;
+    };
     return userModel;
 };
