@@ -63,6 +63,14 @@ function errorHandler(err, req, res, next) {
 //         res.json(err);
 //     }
 // })
+
+const model = require('./model')
+model.sequelize.authenticate().then(() => {
+    console.log('conenct db completed')
+}).catch(err => {
+    console.log(err)
+})
+model.sequelize.sync()
 app.get('/', (req, res) => {
     res.send("welcom to kaopiz!")
 })

@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const bcrypt_promise = require('bcrypt-promise')
 const jwt = require('jsonwebtoken');
 const CONFIG = require('../conf/config')
+const Sequelize = require('sequelize')
 
 module.exports = (sequelize) => {
     var userModel = sequelize.define('user', {
@@ -44,6 +45,6 @@ module.exports = (sequelize) => {
         let exp_time = parseInt(CONFIG.jwt_expiration)
         return "Bearer " + jwt.sign({ user_id: this.id }, CONFIG.jwt_encryption, { expiresIn: expiration_time });
     }
-    
+
     return userModel;
 };
