@@ -9,7 +9,7 @@ module.exports.to = async(promise) => {
 }
 
 //error web response
-module.exports.responseErr = (res, err, code) => {
+module.exports.ReE = (res, err, code) => {
         if (typeof err == 'object' && typeof err.message != 'undefined') {
             err = err.message
         }
@@ -19,13 +19,12 @@ module.exports.responseErr = (res, err, code) => {
         return res.json({ success: false, error: err })
     }
     // success web response 
-module.exports.responseSuc = (res, data, code) => {
+module.exports.ReS = (res, data, code) => {
     let send_data = { success: true }
     if (typeof data == "object") {
         send_data = Object.assign(data, send_data)
     }
-    if (typeof code !== 'undefined') res.statusCode = code
-
+    if (typeof code !== 'undefined') res.statusCode = 200
     return res.json(send_data)
 }
 

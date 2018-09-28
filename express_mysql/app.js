@@ -4,13 +4,15 @@ const logger = require('morgan');
 const cors = require('cors');
 const app = express();
 const passport = require('passport');
-const router = express.Router();
 app.use(logger('dev'));
 app.use(express.urlencoded());
-app.use('/', router);
 var bodyParser = require('body-parser')
 var methodOverride = require('method-override')
+const v1 = require('./routes/v1');
+const CONFIG = require('./conf/config');
 
+
+console.log(CONFIG.db_name)
 
 /**
  * error handle
@@ -43,37 +45,18 @@ function errorHandler(err, req, res, next) {
     res.status(500)
     res.render('error', { error: err })
 }
-////////////////////////////////
-
-// app.use('/user/users', (req, res, next) => {
-//     console.log("Request type:", req.method);
-//     next();
-// })
-
-// app.get('/user/users', async(req, res) => {
-//     var users = await userDb.findAllUser()
-//     res.json(users);
-// })
-// app.post('/user/create', async(req, res) => {
-//     console.log(req.body.name);
-//     try {
-//         var result = await userDb.createUser(req.body.name);
-//         res.json(result);
-//     } catch (err) {
-//         res.json(err);
-//     }
-// })
 
 const model = require('./model')
 model.sequelize.authenticate().then(() => {
     console.log('conenct db completed')
 }).catch(err => {
-    console.log(err)
+    console.error('Unable to connect to SQL database:', CONFIG.db_name, err)
 })
 model.sequelize.sync()
-app.get('/', (req, res) => {
-    res.send("welcom to kaopiz!")
-})
+app.use(cors())
+    // use route
+app.use('/v1', v1)
+
 app.listen(3000, () => {
     console.log("server listenning on port 3000")
 })
